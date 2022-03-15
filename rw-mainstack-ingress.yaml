@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-main
+  namespace: rw-control
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    #nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /main(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: main-service
+                port:
+                  number: 80
+    - http:
+        paths:
+          - path: /basement(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: basement-service
+                port:
+                  number: 80

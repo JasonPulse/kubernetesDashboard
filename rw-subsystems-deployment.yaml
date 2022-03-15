@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: subsystems-seq
+  namespace: rw-control
+  annotations:
+    "linkerd.io/inject": "enabled"
+spec:
+  selector:
+    matchLabels:
+      app: seq
+  template:
+    metadata:
+      labels:
+        app: seq
+    spec:
+      containers:
+        - name: seq
+          image: datalust/seq:latest
+          resources:
+            requests:
+              memory: "1024Mi"
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 5341
+          env:
+            - name: "ACCEPT_EULA"
+              value: "Y"

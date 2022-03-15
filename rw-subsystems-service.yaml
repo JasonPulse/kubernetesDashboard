@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: seq-service
+  namespace: rw-control
+spec:
+  type: ClusterIP
+  selector:
+    app: seq
+  ports:
+    - name: data-ingestion
+      port: 5341
+      targetPort: 5341
+      #nodePort: 30341
+    - name: log-view
+      port: 80
+      targetPort: 80
+      #nodePort: 30180
+    - name: log-view-https
+      port: 443
+      targetPort: 443
+      #nodePort: 30180

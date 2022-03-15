@@ -1,0 +1,125 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mainstack
+  namespace: rw-control
+  annotations:
+    "linkerd.io/inject": "enabled"
+spec:
+  selector:
+    matchLabels:
+      app: main
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: main
+    spec:
+      containers:
+        - name: main
+          image: jasonpulse/radient.main:latest
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: dffee265e8574b61b4c551d61772cac0
+            - name: ProcessorId
+              value: dffee265-e857-4b61-b4c5-51d61772cac0
+            - name: LicenseKey
+              value: QUYFEY-ZMSZFE-F3ZEQP-2FXTRL-VQEQ1Q-UDA1AW-6JRNBH-RBGFC6-NYRUDF-V6NTXZ-6FZ6NE-RYJUC6-NYXGAJ-R6UKX7-GRXNTF-RTGVMY-QSDVBV-Z2
+            - name: extremeSSHPass
+              value: prgJbimb7X0MaVtu^Hm8p02HG0A$mxF
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /run/desktop/mnt/host/z/data/main
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: basement
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: basement
+  template:
+    metadata:
+      labels:
+        app: basement
+    spec:
+      containers:
+        - name: basement
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: fde80ba70ab2452cb7963df84bc2f5b3
+            - name: ProcessorId
+              value: fde80ba7-0ab2-452c-b796-3df84bc2f5b3
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: CE92X9-EWVPYJ-TFSEAG-BJ8QHJ-XX1QE3-A1AX2J-CXKQXZ-4UV6NQ-XA6UW6-NTXHGR-XNNER7-DVR6NR-XW6JT2-MER26R-RNMER6-GVXHCD-EMDRQ
+            - name: QuartzName
+              value: BasementQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "0"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13000
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /run/desktop/mnt/host/z/data/sub/fde80ba7-0ab2-452c-b796-3df84bc2f5b3/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /run/desktop/mnt/host/z/data/Qsc/
+            type: Directory

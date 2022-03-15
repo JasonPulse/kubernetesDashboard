@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-subsystems
+  namespace: rw-control
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    #nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      rewrite ^(/seq)$ $1/ redirect;
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /seq(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: seq-service
+                port:
+                  number: 80
