@@ -70,12 +70,15 @@ kubectl get pods --all-namespaces
 echo "Testing Kubernetes nodes... "
 kubectl get nodes
 kubectl taint node k8s-master node-role.kubernetes.io/master:NoSchedule-
-echo "Installing Kubernetes Dashboard v2.5.0"
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
 echo "Installing Kubernetes nginx ingress controller v1.1.1"
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.1/deploy/static/provider/cloud/deploy.yaml
 echo "Configuring Ingress"
-kubectl apply -f ingress-ConfigMap.yaml
-kubectl apply -f custom-snippets.configmap.yaml
-echo "need to apply /IngressSettings/ingress-service.yaml but edit the externalIPs section to include this machine ip"
-echo
+kubectl apply -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/IngressSettings/ingress-ConfigMap.yaml
+kubectl apply -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/IngressSettings/custom-snippets.configmap.yaml
+kubectl apply -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/IngressSettings/ingress-service.yaml
+echo "Installing Kubernetes Dashboard v2.5.0"
+kubectl apply -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/Dashboard/dashboard-deployment.yaml
+kubectl apply -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/Dashboard/dashboard-rolebindings.yaml
+kubectl apply -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/Dashboard/ingress-dashboard.yaml
+echo "------------Please make sure you edit the ingress service and the externalIPs field to match this machines IP Address----------"
+echo "sudo kubectl get service -n ingress-nginx ingress-nginx-controller -o yaml"
