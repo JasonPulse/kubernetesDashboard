@@ -69,13 +69,15 @@ echo "Testing Kubernetes namespaces... "
 kubectl get pods --all-namespaces
 echo "Testing Kubernetes nodes... "
 kubectl get nodes
+sudo sleep 30
 kubectl taint node k8s-master node-role.kubernetes.io/master:NoSchedule-
 echo "Installing Kubernetes nginx ingress controller v1.1.1"
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.1/deploy/static/provider/cloud/deploy.yaml
 echo "Configuring Ingress"
 kubectl apply -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/IngressSettings/ingress-ConfigMap.yaml
 kubectl apply -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/IngressSettings/custom-snippets.configmap.yaml
-kubectl apply -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/IngressSettings/ingress-service.yaml
+sudo sleep 10
+kubectl patch service -n ingress-nginx ingress-nginx-controller -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/IngressSettings/ingress-service.yaml
 echo "Installing Kubernetes Dashboard v2.5.0"
 kubectl apply -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/Dashboard/dashboard-deployment.yaml
 kubectl apply -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/Dashboard/dashboard-rolebindings.yaml
