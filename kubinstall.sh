@@ -77,10 +77,11 @@ echo "Configuring Ingress"
 kubectl apply -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/IngressSettings/ingress-ConfigMap.yaml
 kubectl apply -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/IngressSettings/custom-snippets.configmap.yaml
 sudo sleep 10
-kubectl patch service -n ingress-nginx ingress-nginx-controller -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/IngressSettings/ingress-service.yaml
+sudo curl https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/IngressSettings/ingress-service.yaml > ingress-service.yaml
+kubectl patch service -n ingress-nginx ingress-nginx-controller --patch-file ingress-service.yaml
 echo "Installing Kubernetes Dashboard v2.5.0"
-kubectl apply -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/Dashboard/dashboard-deployment.yaml
-kubectl apply -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/Dashboard/dashboard-rolebindings.yaml
-kubectl apply -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/Dashboard/ingress-dashboard.yaml
+kubectl apply -f kubectl apply -n portainer -f https://raw.githubusercontent.com/portainer/k8s/master/deploy/manifests/portainer/portainer-lb.yaml
+sudo sleep 10
+kubectl apply -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/Portainer/ingress-portainer.yaml
 echo "------------Please make sure you edit the ingress service and the externalIPs field to match this machines IP Address----------"
 echo "sudo kubectl get service -n ingress-nginx ingress-nginx-controller -o yaml"

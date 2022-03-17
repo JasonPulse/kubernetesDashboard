@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-dashboard
-  namespace: kubernetes-dashboard
+  name: ingress-portainer
+  namespace: portainer
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
@@ -13,10 +13,10 @@ spec:
   rules:
     - http:
         paths:
-          - path: /dashboard(/|$)(.*)
+          - path: /portainer(/|$)(.*)
             pathType: Prefix
             backend:
               service:
-                name: kubernetes-dashboard
+                name: portainer
                 port:
-                  number: 443
+                  number: 9443
