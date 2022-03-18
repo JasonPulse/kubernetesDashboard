@@ -78,10 +78,13 @@ kubectl apply -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboar
 kubectl apply -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/IngressSettings/custom-snippets.configmap.yaml
 sudo sleep 10
 sudo curl https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/IngressSettings/ingress-service.yaml > ingress-service.yaml
+sudo sed -i 's/172.25.15.74/${PUBLIC_IP_ADDRESS}/g' ingress-service.yaml
 kubectl patch service -n ingress-nginx ingress-nginx-controller --patch-file ingress-service.yaml
 echo "Installing Kubernetes Dashboard v2.5.0"
-kubectl apply -f kubectl apply -n portainer -f https://raw.githubusercontent.com/portainer/k8s/master/deploy/manifests/portainer/portainer-lb.yaml
-sudo sleep 10
-kubectl apply -f https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/Portainer/ingress-portainer.yaml
-echo "------------Please make sure you edit the ingress service and the externalIPs field to match this machines IP Address----------"
-echo "sudo kubectl get service -n ingress-nginx ingress-nginx-controller -o yaml"
+kubectl -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
+sudo curl https://raw.githubusercontent.com/JasonPulse/kubernetesDashboard/master/Dashboard/dashboard-patch.yaml > dashboard-patch.yaml
+kubectl patch deployment -n kubernetes-dashboard kubernetes-dashboard --patch-file dashboard-patch.yaml
+echo "Installing Portainer-Nodeport"
+sudo curl -L https://downloads.portainer.io/portainer-agent-k8s-nodeport.yaml -o portainer-agent-k8s.yaml
+kubectl apply -f portainer-agent-k8s.yaml
+echo "Portainer Agent should be accessable at ${PUBLIC_IP_ADDRESS}:30778"

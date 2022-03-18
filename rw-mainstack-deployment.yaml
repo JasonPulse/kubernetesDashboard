@@ -46,7 +46,7 @@ spec:
             type: File
         - name: data
           hostPath:
-            path: /run/desktop/mnt/host/z/data/main
+            path: /home/dev-runway/data/main
             type: Directory
 ---
 apiVersion: apps/v1
@@ -117,9 +117,2934 @@ spec:
             type: File
         - name: data
           hostPath:
-            path: /run/desktop/mnt/host/z/data/sub/fde80ba7-0ab2-452c-b796-3df84bc2f5b3/
+            path: /home/dev-runway/data/sub/fde80ba7-0ab2-452c-b796-3df84bc2f5b3/
             type: DirectoryOrCreate
         - name: qsc
           hostPath:
-            path: /run/desktop/mnt/host/z/data/Qsc/
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spa
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: spa
+  template:
+    metadata:
+      labels:
+        app: spa
+    spec:
+      containers:
+        - name: spa
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: 92026c705529432995c1bda24daaeba9
+            - name: ProcessorId
+              value: 92026c70-5529-4329-95c1-bda24daaeba9
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: QQ22JY-U5SUV8-3GH26F-HK3FHP-MXPA1Q-QEA1AJ-GRQ2JU-X28FQ6-NYXHGR-B6NTX6-GRB6NW-3HJUZ6-NERW4U-W2MTRA-4UCXGS-RJGVXH-CDEMDR-Q
+            - name: QuartzName
+              value: SpaQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "1"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13001
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/92026c70-5529-4329-95c1-bda24daaeba9/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skylounge
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: skylounge
+  template:
+    metadata:
+      labels:
+        app: skylounge
+    spec:
+      containers:
+        - name: skylounge
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: 1cc172ff1d0242ac894b3539a6e3572f
+            - name: ProcessorId
+              value: 1cc172ff-1d02-42ac-894b-3539a6e3572f
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: QQ8DW3-ZNM2J6-Q53ZS6-67QEZ4-FSJA1Q-U3A1AG-JUXNUK-XBGJRN-NWXW2R-W6NTXB-DUXNNQ-3JAFWN-NRXHJR-B6TJXS-8RC68E-XX6VXH-CDEMDR-Q
+            - name: QuartzName
+              value: SkyLoungeQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "2"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13002
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/1cc172ff-1d02-42ac-894b-3539a6e3572f/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skyloungevip
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: skyloungevip
+  template:
+    metadata:
+      labels:
+        app: skyloungevip
+    spec:
+      containers:
+        - name: skyloungevip
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: 5fab49bb2969453da07001d5e317bfd8
+            - name: ProcessorId
+              value: 5fab49bb-2969-453d-a070-01d5e317bfd8
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: QQBJ6K-MX9YCH-E7UXM3-RVWFL5-23DQ1Q-QEA1AH-GJZXGG-XJGUWN-NEXJGF-B6NTXH-JRENNW-RTJFQ6-NQXGAJ-C6BFXG-JFWX6G-RUGVXH-CDEMDR-Q
+            - name: QuartzName
+              value: SkyLoungeVipQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "3"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13003
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/5fab49bb-2969-453d-a070-01d5e317bfd8/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 24hrcafe
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: 24hrcafe
+  template:
+    metadata:
+      labels:
+        app: 24hrcafe
+    spec:
+      containers:
+        - name: 24hrcafe
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: 33b264b6c05f47b59326cb3575164ea1
+            - name: ProcessorId
+              value: 33b264b6-c05f-47b5-9326-cb3575164ea1
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: QED3MS-42NRVZ-QBRLZ6-2BGWZL-CJFQ1Q-EEA1A6-JRWXJU-XYGUR6-NRRTDF-RNNTX7-GUC6NW-36GRR6-NRRZ8R-C68YXG-GFE6BS-RGGVXH-CDEMDR-Q
+            - name: QuartzName
+              value: 24hrCafeQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "4"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13004
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/33b264b6-c05f-47b5-9326-cb3575164ea1/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: baccart
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: baccart
+  template:
+    metadata:
+      labels:
+        app: baccart
+    spec:
+      containers:
+        - name: baccart
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: d8ed87b1a8504ca0a543543aa6b2650e
+            - name: ProcessorId
+              value: d8ed87b1-a850-4ca0-a543-543aa6b2650e
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: QEU8FD-LF6ZA9-JP8M6Q-ZRF6T9-J4SA1Q-TEA1AW-2VCXBA-37GUZ6-NWRUDF-Q6NTX2-4UQ6NW-RHAFX6-NYXYJR-ZNTJXZ-6RR6MQ-XS6VXH-CDEMDR-Q
+            - name: QuartzName
+              value: BaccaratQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "5"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13005
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/d8ed87b1-a850-4ca0-a543-543aa6b2650e/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gentingpalace
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: gentingpalace
+  template:
+    metadata:
+      labels:
+        app: gentingpalace
+    spec:
+      containers:
+        - name: gentingpalace
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: 36481085466f400c82b1eb7e09c1f2db
+            - name: ProcessorId
+              value: 36481085-466f-400c-82b1-eb7e09c1f2db
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: QEG7UL-TPRPAB-9S9QYA-JK9PW4-PGJQ1Q-UEA1A6-GFE2KW-XTAVC6-NTXNGF-RNNTXT-ARXNNQ-3BGUZ6-NYRZ8F-CXUW32-4RRXJT-RZ6VXH-CDEMDR-Q
+            - name: QuartzName
+              value: GentingPalaceQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "6"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13006
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/36481085-466f-400c-82b1-eb7e09c1f2db/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crocksfordlobby
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: crocksfordlobby
+  template:
+    metadata:
+      labels:
+        app: crocksfordlobby
+    spec:
+      containers:
+        - name: crocksfordlobby
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: 7f1c89d3305e4b95a182092dc7a1ff22
+            - name: ProcessorId
+              value: 7f1c89d3-305e-4b95-a182-092dc7a1ff22
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: EDJ4SQ-CVAJ7U-HSQA7H-Y3TVQ3-UW1QQD-A1A7GJ-Z6GA3J-AJX6NR-XTDFCN-NTXZ4V-C6NWRG-AVW6NQ-XJGREN-G9XA4R-RX6DXB-GVXHCD-EMDRQ
+            - name: QuartzName
+              value: CrocksfordLobbyQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "7"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13007
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/7f1c89d3-305e-4b95-a182-092dc7a1ff22/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crystalsbar
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: crystalsbar
+  template:
+    metadata:
+      labels:
+        app: crystalsbar
+    spec:
+      containers:
+        - name: crystalsbar
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: 6b09f2960f3a4086b6e21a8b210f16c1
+            - name: ProcessorId
+              value: 6b09f296-0f3a-4086-b6e2-1a8b210f16c1
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: 8BSVF3-JPPJMH-8HWWJV-AXZ9MP-Q21QED-A1ANGU-Q6KURB-DVR6NQ-XX8RZN-NTXTAV-R6NERN-DJW6NW-XA2VWX-JWXTGJ-Z28RRG-GVXHCD-EMDRQ
+            - name: QuartzName
+              value: CrystalsBarQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "8"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13008
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/6b09f296-0f3a-4086-b6e2-1a8b210f16c1/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eastconventionballrooms
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: eastconventionballrooms
+  template:
+    metadata:
+      labels:
+        app: eastconventionballrooms
+    spec:
+      containers:
+        - name: eastconventionballrooms
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: 357973082e1b4e929177deb04a44d0d2
+            - name: ProcessorId
+              value: 35797308-2e1b-4e92-9177-deb04a44d0d2
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: QU9GZY-F4G5PL-5VA8AU-GCQAKD-E3GA1Q-TDA1A6-DFV6KK-X6ART6-NEXS4R-WNNTXS-4VW6NW-3GJFV6-NTRS6U-Q2MWRY-AFEXUT-RBGVXH-CDEMDR-Q
+            - name: QuartzName
+              value: EastConvBallroomQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "9"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13009
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/35797308-2e1b-4e92-9177-deb04a44d0d2/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eastconventionmeetings
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: eastconventionmeetings
+  template:
+    metadata:
+      labels:
+        app: eastconventionmeetings
+    spec:
+      containers:
+        - name: eastconventionmeetings
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: c3d90382095d4af88d10a1e68ae848f4
+            - name: ProcessorId
+              value: c3d90382-095d-4af8-8d10-a1e68ae848f4
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: U8ZZAM-DCZWRF-DB68UB-93PXA6-4S1QQC-A1A28R-ENKQX6-AVW6NQ-XJDFEN-NTXA6J-T6NQ3W-4RQ6NW-RGDJR2-KWRS2V-E2KURY-GVXHCD-EMDRQ
+            - name: QuartzName
+              value: EastConvMeetingsQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "10"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13010
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/c3d90382-095d-4af8-8d10-a1e68ae848f4/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eastconventionpublic
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: eastconventionpublic
+  template:
+    metadata:
+      labels:
+        app: eastconventionpublic
+    spec:
+      containers:
+        - name: eastconventionpublic
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: 1b36fe30a49b4f1fb729961b995e0f52
+            - name: ProcessorId
+              value: 1b36fe30-a49b-4f1f-b729-961b995e0f52
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: QEC2P2-KWD8KJ-QA47LG-NMQN2W-6LLA1Q-ECA1AG-GUX28U-RS8RQ6-NWRYDV-WNNTXX-4RRNNE-R7GRB6-NW3NDR-WNKW3H-DJQ26H-XBGVXH-CDEMDR-Q
+            - name: QuartzName
+              value: EastConvPublicQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "11"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13011
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/1b36fe30-a49b-4f1f-b729-961b995e0f52/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eastlobby
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: eastlobby
+  template:
+    metadata:
+      labels:
+        app: eastlobby
+    spec:
+      containers:
+        - name: eastlobby
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: f640eafa68cc4fba8f512630ccdf50f4
+            - name: ProcessorId
+              value: f640eafa-68cc-4fba-8f51-2630ccdf50f4
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: A6TAXJ-RMD8KR-A5VH2U-CVXJAP-EW1QTC-A1AX6F-E2UYRA-6JZNNU-XUJUXN-NTXX6U-ZNNQ3X-4FZ6NE-XNJRQ6-GFRW6J-C2UURY-GVXHCD-EMDRQ
+            - name: QuartzName
+              value: EastLobbyQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "12"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13012
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/f640eafa-68cc-4fba-8f51-2630ccdf50f4/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edistrict
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: edistrict
+  template:
+    metadata:
+      labels:
+        app: edistrict
+    spec:
+      containers:
+        - name: edistrict
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: d306fc825333461989ed8777e619b7c9
+            - name: ProcessorId
+              value: d306fc82-5333-4619-89ed-8777e619b7c9
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: 7AF275-AE7QG6-32HBXZ-42PN5V-FZ1QUC-A1AW8R-Q28UR2-2VW6NY-X6JRX6-NTXNDR-B6NQ3J-DJENNQ-37JFV6-BJXGDV-WN8RRJ-GVXHCD-EMDRQ
+            - name: QuartzName
+              value: EdistrictQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "13"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13013
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/d306fc82-5333-4619-89ed-8777e619b7c9/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edrmaintraining
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: edrmaintraining
+  template:
+    metadata:
+      labels:
+        app: edrmaintraining
+    spec:
+      containers:
+        - name: edrmaintraining
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: cc531702f5bb48e892a73bcd5e49ff3b
+            - name: ProcessorId
+              value: cc531702-f5bb-48e8-92a7-3bcd5e49ff3b
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: 9T5KYD-Z4QT48-WDTBK4-FAB6US-NW1QQ4-A1A28U-C6JWX7-ARW6NU-RHGUWN-NTXUDJ-T6NW3B-DUV6NR-XZ8UEN-MYRYDV-RX6FXZ-6VXHCD-EMDRQ
+            - name: QuartzName
+              value: EdrTrainingQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "14"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13014
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/cc531702-f5bb-48e8-92a7-3bcd5e49ff3b/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: execpublic
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: execpublic
+  template:
+    metadata:
+      labels:
+        app: execpublic
+    spec:
+      containers:
+        - name: execpublic
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: c7efcfd42b654b3aae2a30bfddd4c878
+            - name: ProcessorId
+              value: c7efcfd4-2b65-4b3a-ae2a-30bfddd4c878
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: VA6T3V-DEK4J8-UW9K2Q-W4AEJD-YZ1QE4-A1A28F-CX6FRX-2JE6NE-XZ6FC6-NTXZ8R-ZNNWRS-6RZNNR-XTGURX-BGRW2F-XXKKXU-GVXHCD-EMDRQ
+            - name: QuartzName
+              value: ExecPublicQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "15"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13015
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/c7efcfd4-2b65-4b3a-ae2a-30bfddd4c878/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: casinofloor
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: casinofloor
+  template:
+    metadata:
+      labels:
+        app: casinofloor
+    spec:
+      containers:
+        - name: casinofloor
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: ff2dcc055ddd49c299189bd89a9b7b10
+            - name: ProcessorId
+              value: ff2dcc05-5ddd-49c2-9918-9bd89a9b7b10
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: QTF7FT-BC7ZM4-R4V62N-ABJXNN-M44A1Q-T4A1AX-6JW2BF-R22RC6-NYXW2J-ENNTXJ-JUW6NW-3JDRT6-NW3Z2J-T6KWRJ-GUV2GS-XTGVXH-CDEMDR-Q
+            - name: QuartzName
+              value: CasinoFloorQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "16"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13016
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/ff2dcc05-5ddd-49c2-9918-9bd89a9b7b10/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fitness
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: fitness
+  template:
+    metadata:
+      labels:
+        app: fitness
+    spec:
+      containers:
+        - name: fitness
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: 1f6b4c8ae2c54b29acefed6c97da5b90
+            - name: ProcessorId
+              value: 1f6b4c8a-e2c5-4b29-acef-ed6c97da5b90
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: SQF2Z2-8MS2W2-TXGVLK-GG2BW7-5Z1QU4-A1AX6J-W2BFR2-2RC6NY-XW2JEN-NTXJJU-W6NW3J-DRT6NW-3Z2JT6-KWRJGU-V2GSXT-GVXHCD-EMDRQ
+            - name: QuartzName
+              value: FitnessQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "17"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13017
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/1f6b4c8a-e2c5-4b29-acef-ed6c97da5b90/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fuhu
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: fuhu
+  template:
+    metadata:
+      labels:
+        app: fuhu
+    spec:
+      containers:
+        - name: fuhu
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: 2c75d17a76b341f59158fb0d9f3dad09
+            - name: ProcessorId
+              value: 2c75d17a-76b3-41f5-9158-fb0d9f3dad09
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: NJBMWR-FBQBXW-USR457-LVWY6X-QX1QQR-A1ABJU-V6MTRG-JFZNNK-XNGUX6-NTXGGJ-C6NW3G-DFT6NU-RZ2REN-KUR6AJ-ZXBAXJ-GVXHCD-EMDRQ
+            - name: QuartzName
+              value: FuhuQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "18"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13018
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/2c75d17a-76b3-41f5-9158-fb0d9f3dad09/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gentinghiltonlobby
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: gentinghiltonlobby
+  template:
+    metadata:
+      labels:
+        app: gentinghiltonlobby
+    spec:
+      containers:
+        - name: gentinghiltonlobby
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: e03e4b15bc2147afb3bd8818ba718b57
+            - name: ProcessorId
+              value: e03e4b15-bc21-47af-b3bd-8818ba718b57
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: QE74D4-FTUU78-QN2225-AZPEVK-ATSA1Q-ERA1AS-2RX6BG-XZ4RC6-NER26R-Z6NTX7-DURNNE-R6GUEN-NQ3UDR-T2GSR7-DRT2GH-X7GVXH-CDEMDR-Q
+            - name: QuartzName
+              value: GentingLobbyQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "19"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13019
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/e03e4b15-bc21-47af-b3bd-8818ba718b57/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: highlimit
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: highlimit
+  template:
+    metadata:
+      labels:
+        app: highlimit
+    spec:
+      containers:
+        - name: highlimit
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: ddc7edce66584db39d7de598b8d0c85b
+            - name: ProcessorId
+              value: ddc7edce-6658-4db3-9d7d-e598b8d0c85b
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: 546CXJ-7BG4AL-F7HCUX-9ECCMD-9Q1QTR-A1AW2J-XN8YRW-8UCNNU-XNDFT6-NTXW6U-X6NW3W-8FENNY-RHDVT2-GA3W2R-XXKYXZ-6VXHCD-EMDRQ
+            - name: QuartzName
+              value: HighLimitQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "20"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13020
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/ddc7edce-6658-4db3-9d7d-e598b8d0c85b/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hospitallitysuite
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: hospitallitysuite
+  template:
+    metadata:
+      labels:
+        app: hospitallitysuite
+    spec:
+      containers:
+        - name: hospitallitysuite
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: 0b0e3f5c3986412fb4e27894c0296a16
+            - name: ProcessorId
+              value: 0b0e3f5c-3986-412f-b4e2-7894c0296a16
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: CD5AGV-EKYP9A-M3KWEU-W3KQHS-431QUR-A1ATGU-Q6BFXX-4FXNNR-XJAVR6-NTXGGR-RNNERY-DJW6NK-XUDVE6-GAXBDV-R6TSXN-GVXHCD-EMDRQ
+            - name: QuartzName
+              value: HospSuiteQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "21"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13021
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/0b0e3f5c-3986-412f-b4e2-7894c0296a16/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sunsoutbunsout
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: sunsoutbunsout
+  template:
+    metadata:
+      labels:
+        app: sunsoutbunsout
+    spec:
+      containers:
+        - name: sunsoutbunsout
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: c0858371ada24ce3b6ed0996e8168c3f
+            - name: ProcessorId
+              value: c0858371-ada2-4ce3-b6ed-0996e8168c3f
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: QQCJQM-FYKG99-9SXM75-6R3RGZ-THGQ1Q-QFA1A2-2RT6MQ-36JFZ6-NWRW4U-W6NTX2-4JX6NE-RNDJEN-NQXJDV-R6BA3G-GFT6GF-XX6VXH-CDEMDR-Q
+            - name: QuartzName
+              value: SunsOutQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "22"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13022
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/c0858371-ada2-4ce3-b6ed-0996e8168c3f/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pokerdeli
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: pokerdeli
+  template:
+    metadata:
+      labels:
+        app: pokerdeli
+    spec:
+      containers:
+        - name: pokerdeli
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: 29f19a40b9c84a37b7c6226048c70b15
+            - name: ProcessorId
+              value: 29f19a40-b9c8-4a37-b7c6-226048c70b15
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: 4DVBFF-2SDUQC-C3ZK3J-MHFQLZ-M31QEF-A1ABDV-RNUW3A-2FQ6NE-RJJUT6-NTXA8R-V6NER7-JUR6NE-XBGFQ2-MQ328F-Q2GSXH-GVXHCD-EMDRQ
+            - name: QuartzName
+              value: PokerDeliQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "23"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13023
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/29f19a40-b9c8-4a37-b7c6-226048c70b15/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pool
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: pool
+  template:
+    metadata:
+      labels:
+        app: pool
+    spec:
+      containers:
+        - name: pool
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: a715e84b1ed048f6ae768959259225e0
+            - name: ProcessorId
+              value: a715e84b-1ed0-48f6-ae76-8959259225e0
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: HMSFRS-PCBLMG-CK74D2-QBRS9R-BX1QTF-A1AA8F-Z6MYRU-AFWNNW-XS2JQ6-NTXUGJ-R6NWRS-8FR6NQ-3JDFB2-JYXJGR-W6MYRT-GVXHCD-EMDRQ
+            - name: QuartzName
+              value: PoolQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "24"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13024
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/a715e84b-1ed0-48f6-ae76-8959259225e0/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: site
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: site
+  template:
+    metadata:
+      labels:
+        app: site
+    spec:
+      containers:
+        - name: site
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: d542c60580ed40d9a2370b38391da532
+            - name: ProcessorId
+              value: d542c605-80ed-40d9-a237-0b38391da532
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: ZTMUUQ-UPW6N8-RY6DPG-GWZZ8S-MX1QUF-A1AW4F-E2JRRN-ARC6NQ-3TDJEN-NTXTAJ-B6NWRB-JRV6NQ-XZ8RT6-JW3GAJ-ZNMRXB-GVXHCD-EMDRQ
+            - name: QuartzName
+              value: SiteQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "25"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13025
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/d542c605-80ed-40d9-a237-0b38391da532/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: southconventionballrooms
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: southconventionballrooms
+  template:
+    metadata:
+      labels:
+        app: southconventionballrooms
+    spec:
+      containers:
+        - name: southconventionballrooms
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: 409a55dd6e384f059c5da1de570aa620
+            - name: ProcessorId
+              value: 409a55dd-6e38-4f05-9c5d-a1de570aa620
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: Y46GSR-VKPMG2-9548DV-MYQ97P-QW1QQV-A1AYAR-B6THXH-AJENNU-XS8RT6-NTXX2R-C6NW32-4FENNW-RGAJCN-MKXTDU-ZX8EXT-GVXHCD-EMDRQ
+            - name: QuartzName
+              value: SouthConvBallroomQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "26"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13026
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/409a55dd-6e38-4f05-9c5d-a1de570aa620/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: southconventionmeetings
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: southconventionmeetings
+  template:
+    metadata:
+      labels:
+        app: southconventionmeetings
+    spec:
+      containers:
+        - name: southconventionmeetings
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: 16f3b34d2f8944eb949c5a30288e12eb
+            - name: ProcessorId
+              value: 16f3b34d-2f89-44eb-949c-5a30288e12eb
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: QECH8B-YEUJ4X-XGCE6E-D8FBAQ-LL6A1Q-EVA1AG-GFRNJE-R6AFEN-NEXX2V-B6NTXY-DJWNNW-3YDVXN-NYXA8R-Q2JQ3U-DJZ2JY-RZ6VXH-CDEMDR-Q
+            - name: QuartzName
+              value: SouthConvMeetingQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "27"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13027
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/16f3b34d-2f89-44eb-949c-5a30288e12eb/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: southconventionpublic
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: southconventionpublic
+  template:
+    metadata:
+      labels:
+        app: southconventionpublic
+    spec:
+      containers:
+        - name: southconventionpublic
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: e2b838af5b814be490fc08657f600dcf
+            - name: ProcessorId
+              value: e2b838af-5b81-4be4-90fc-08657f600dcf
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: QQYSWT-M3FE2A-C26SEJ-DND2KL-776Q1Q-TVA1AS-6RWXKR-XUDURN-NYXZ2V-Z6NTXZ-4JE6NW-3TGJXN-NQXUGF-C68URN-ARQ2BF-RX6VXH-CDEMDR-Q
+            - name: QuartzName
+              value: SouthConvPublicQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "28"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13028
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/e2b838af-5b81-4be4-90fc-08657f600dcf/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kushinori
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: kushinori
+  template:
+    metadata:
+      labels:
+        app: kushinori
+    spec:
+      containers:
+        - name: kushinori
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: fb4aae15247648b98c32805b5190f071
+            - name: ProcessorId
+              value: fb4aae15-2476-48b9-8c32-805b5190f071
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: QTS7WP-AL5TRF-YFHWWN-FPAMKN-THXQ1Q-Q5A1AX-6UE6TS-RS4RC6-NEXYJF-R6NTXU-GUB6NQ-328RW6-NQ3TDF-WNMWXJ-ARRXUK-XGGVXH-CDEMDR-Q
+            - name: QuartzName
+              value: KusiNoriQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "30"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13030
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/fb4aae15-2476-48b9-8c32-805b5190f071/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: famousfoodstreet
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: famousfoodstreet
+  template:
+    metadata:
+      labels:
+        app: famousfoodstreet
+    spec:
+      containers:
+        - name: famousfoodstreet
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: 017996d0b9214054bf404ae69cb408b4
+            - name: ProcessorId
+              value: 017996d0-b921-4054-bf40-4ae69cb408b4
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: QQ95MH-Y5C3KP-E4YQ9B-KG93EJ-RKBQ1Q-E5A1AT-DRV6KW-3NAJQ6-NERJGR-Z6NTXT-DFE6NE-RX2FQ6-NTXA4J-R6KRRZ-2FQ2KE-RYGVXH-CDEMDR-Q
+            - name: QuartzName
+              value: FamousFoodQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "31"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13031
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/017996d0-b921-4054-bf40-4ae69cb408b4/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vip
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: vip
+  template:
+    metadata:
+      labels:
+        app: vip
+    spec:
+      containers:
+        - name: vip
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: dd7541240ab7460994b71e8b9e9d587d
+            - name: ProcessorId
+              value: dd754124-0ab7-4609-94b7-1e8b9e9d587d
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: QQS2PR-BX7HCK-CGEELY-GSTQAW-6PUQ1Q-T5A1AW-2JV6MT-XGGRE6-NQXA6U-V6NTXN-ARB6NW-3YGUV6-NWXS2V-WNKYRJ-AJC2KK-XW6VXH-CDEMDR-Q
+            - name: QuartzName
+              value: VipQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "32"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13032
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/dd754124-0ab7-4609-94b7-1e8b9e9d587d/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wallyswine
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: wallyswine
+  template:
+    metadata:
+      labels:
+        app: wallyswine
+    spec:
+      containers:
+        - name: wallyswine
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: e4d3656f1b194916a5cfcd10060f22dd
+            - name: ProcessorId
+              value: e4d3656f-1b19-4916-a5cf-cd10060f22dd
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: VJB8LD-382T8C-HR6LFH-E3FRQQ-LZ1QU5-A1AS2F-ENJUXH-GFRNNW-XZ4RB6-NTXJDR-R6NWRH-JURNNR-RW4RQ2-UUXTGJ-W2JTRW-6VXHCD-EMDRQ
+            - name: QuartzName
+              value: WallysWineQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "33"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13033
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/e4d3656f-1b19-4916-a5cf-cd10060f22dd/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whiskeybar
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: whiskeybar
+  template:
+    metadata:
+      labels:
+        app: whiskeybar
+    spec:
+      containers:
+        - name: whiskeybar
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: eca54df4273a4cdfa518fe268657f859
+            - name: ProcessorId
+              value: eca54df4-273a-4cdf-a518-fe268657f859
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: 8TFKPE-SDK2YV-YUZJXG-3K6NAD-WW1QQT-A1AS8U-ZNMTXW-6JE6NE-X7JRZN-NTX22J-RNNWRH-DRT6NU-RS6RR2-KUXHJF-RXKYXJ-GVXHCD-EMDRQ
+            - name: QuartzName
+              value: WhiskeyBarQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "34"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13034
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/eca54df4-273a-4cdf-a518-fe268657f859/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zazubar
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: zazubar
+  template:
+    metadata:
+      labels:
+        app: zazubar
+    spec:
+      containers:
+        - name: zazubar
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: 4e25c37e13f54a8ba44602c06246f926
+            - name: ProcessorId
+              value: 4e25c37e-13f5-4a8b-a446-02c06246f926
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: QTJ8V9-LZ898P-WWV9VE-5GX67Y-Z2AQ1Q-TTA1AY-DJW6MR-R6JFCN-NWX6GJ-C6NTXA-2VWNNW-RYAFR6-NQXBJU-Q28EXY-GFRNKE-XNGVXH-CDEMDR-Q
+            - name: QuartzName
+              value: ZazuQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "35"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13035
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/4e25c37e-13f5-4a8b-a446-02c06246f926/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ayudayclub
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: ayudayclub
+  template:
+    metadata:
+      labels:
+        app: ayudayclub
+    spec:
+      containers:
+        - name: ayudayclub
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: 1c7260179488492190612e9d820c1ea4
+            - name: ProcessorId
+              value: 1c726017-9488-4921-9061-2e9d820c1ea4
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: RZK8N6-RTPTKV-5B26J4-XGNDX9-ZA1QUT-A1AGJU-V2JUXT-DRV6NW-3YAVT6-NTXJGR-Z6NW3T-GFZ6NE-XS4VEX-KEXTJU-Z6BSRY-GVXHCD-EMDRQ
+            - name: QuartzName
+              value: AyuDayclubQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "36"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13036
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/1c726017-9488-4921-9061-2e9d820c1ea4/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: viva
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: viva
+  template:
+    metadata:
+      labels:
+        app: viva
+    spec:
+      containers:
+        - name: viva
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: 6de61e3ba73e4d44855de5ee73d80078
+            - name: ProcessorId
+              value: 6de61e3b-a73e-4d44-855d-e5ee73d80078
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: QESSX2-T8HBMD-A9P4AM-3BTPUN-K4BQ1Q-QGA1AN-AJCX8W-XS8RWN-NWR7JR-CNNTXW-2FE6NQ-3HDFEN-NYRHDJ-CN8RXW-2VQ2UK-XUGVXH-CDEMDR-Q
+            - name: QuartzName
+              value: VivaQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "37"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13037
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/6de61e3b-a73e-4d44-855d-e5ee73d80078/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spine
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: spine
+  template:
+    metadata:
+      labels:
+        app: spine
+    spec:
+      containers:
+        - name: spine
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: 1cd491d8477046298b7bcd2e97edd708
+            - name: ProcessorId
+              value: 1cd491d8-4770-4629-8b7b-cd2e97edd708
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: QUL6H2-WQDCH6-FELYDK-FFN93Y-SAHQ1Q-EGA1AG-JUEXMW-3GAJT6-NTX7JF-Q6NTXN-GRB6NQ-3Z8FWN-NRRW6R-CNKKXS-2JEN8Q-XUGVXH-CDEMDR-Q
+            - name: QuartzName
+              value: SpineQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "38"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13038
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/1cd491d8-4770-4629-8b7b-cd2e97edd708/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redtail
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: redtail
+  template:
+    metadata:
+      labels:
+        app: redtail
+    spec:
+      containers:
+        - name: redtail
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: c45b857a3e554c7eacb090e517b50902
+            - name: ProcessorId
+              value: c45b857a-3e55-4c7e-acb0-90e517b50902
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: MTTRZL-6VD63T-SRS32A-QRPD3A-LX1QTG-A1A22F-C2GA3H-JFZNNR-XS4FC6-NTX28F-CNNWR2-6UQ6NW-3TDJC6-UKXZ4F-Q6KQXB-GVXHCD-EMDRQ
+            - name: QuartzName
+              value: RedTailQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "39"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13039
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/c45b857a-3e55-4c7e-acb0-90e517b50902/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fredseigal
+  namespace: rw-control
+spec:
+  selector:
+    matchLabels:
+      app: fredseigal
+  template:
+    metadata:
+      labels:
+        app: fredseigal
+    spec:
+      containers:
+        - name: fredseigal
+          image: jasonpulse/radient:prod-2.22
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+            - name: data
+              mountPath: /data
+            - name: qsc
+              mountPath: /Qsc
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: SEQ_URL
+              value: http://seq-service:5341
+            - name: SEQ_APIKey
+              value: c63b32837d3445c5b2cc2a2ccec37cf6
+            - name: ProcessorId
+              value: c63b3283-7d34-45c5-b2cc-2a2ccec37cf6
+            - name: MainIpAddress
+              value: main-service
+            - name: MainPort
+              value: "49780"
+            - name: LicenseKey
+              value: LCCFQC-N3JD4N-UHENEN-7H69LT-7A1QUG-A1A26F-X2GFXB-AVX6NK-XW8RE6-NTXHJU-C6NERB-JUXNNE-XA6RXN-GHR28R-V6GJRN-GVXHCD-EMDRQ
+            - name: QuartzName
+              value: FriedSiegalQuartzScheduler
+            - name: QuartzThreads
+              value: "10"
+            - name: QuartzConnectionString
+              value: /data/scheduler.db
+            - name: KafkaAddress
+              value: "10.11.0.40:9092"
+            - name: KafkaPartition
+              value: "40"
+            - name: QSC_File_Path
+              value: "/Qsc"
+            - name: Local_Program_Path
+              value: "/data/program.json"
+            - name: Local_Source_Path
+              value: "/data/sources.json"
+            - name: DatabaseString
+              value: ""
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 13040
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/America/Los_Angeles
+            type: File
+        - name: data
+          hostPath:
+            path: /home/dev-runway/data/sub/c63b3283-7d34-45c5-b2cc-2a2ccec37cf6/
+            type: DirectoryOrCreate
+        - name: qsc
+          hostPath:
+            path: /home/dev-runway/data/Qsc/
             type: Directory
