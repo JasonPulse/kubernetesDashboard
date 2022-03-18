@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Disabling swap...."
 sudo swapoff -a
-sudo sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+sudo sed -i '/swap/s/^\(.*\)$/#\1/g' /etc/fstab
 echo "Installing necessary dependencies...."
 sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
 echo "Setting up hostname...."
